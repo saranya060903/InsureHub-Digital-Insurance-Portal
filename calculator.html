@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Premium Calculator | InsureHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ===== INTERNAL CSS ===== -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+        }
+
+        header {
+            background-color: #0a3d62;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+        }
+
+        .calculator-box {
+            background: white;
+            max-width: 450px;
+            margin: 60px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #0a3d62;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #1e90ff;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f4ff;
+            border-left: 5px solid #1e90ff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+    <h2>InsureHub</h2>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="plans.html">Plans</a>
+        <a href="calculator.html">Calculator</a>
+    </nav>
+</header>
+
+<!-- ===== CALCULATOR ===== -->
+<div class="calculator-box">
+    <h2>Insurance Premium Calculator</h2>
+
+    <label>Insurance Type</label>
+    <select id="insuranceType">
+        <option value="">Select</option>
+        <option value="health">Health Insurance</option>
+        <option value="life">Life Insurance</option>
+        <option value="vehicle">Vehicle Insurance</option>
+        <option value="home">Home Insurance</option>
+    </select>
+
+    <label>Age</label>
+    <input type="number" id="age" placeholder="Enter your age">
+
+    <label>Coverage Amount (₹)</label>
+    <select id="coverage">
+        <option value="">Select</option>
+        <option value="500000">5 Lakhs</option>
+        <option value="1000000">10 Lakhs</option>
+        <option value="2000000">20 Lakhs</option>
+    </select>
+
+    <button onclick="calculatePremium()">Calculate Premium</button>
+
+    <div class="result" id="result" style="display:none;"></div>
+</div>
+
+<!-- ===== INTERNAL JS ===== -->
+<script>
+    function calculatePremium() {
+        const type = document.getElementById("insuranceType").value;
+        const age = document.getElementById("age").value;
+        const coverage = document.getElementById("coverage").value;
+        const resultBox = document.getElementById("result");
+
+        if (type === "" || age === "" || coverage === "") {
+            alert("Please fill all fields");
+            return;
+        }
+
+        let basePremium = 0;
+
+        if (type === "health") basePremium = 3000;
+        else if (type === "life") basePremium = 4000;
+        else if (type === "vehicle") basePremium = 2000;
+        else if (type === "home") basePremium = 2500;
+
+        if (age > 40) basePremium += 1500;
+        else if (age > 25) basePremium += 800;
+
+        if (coverage == 1000000) basePremium += 1200;
+        else if (coverage == 2000000) basePremium += 2500;
+
+        resultBox.style.display = "block";
+        resultBox.innerHTML = "Estimated Annual Premium: ₹" + basePremium;
+    }
+
+    console.log("Premium Calculator Loaded");
+    function checkLogin() {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (!isLoggedIn) {
+        alert("Please login to continue");
+        window.location.href = "login.html";
+    }
+}
+
+</script>
+
+</body>
+</html>

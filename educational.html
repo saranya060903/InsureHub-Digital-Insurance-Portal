@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Educational Insurance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
+        /* Adjusted body padding to clear the 70px fixed header */
+        body { background:#f4f6f8; overflow-x:hidden; padding-top:80px; }
+
+        /* ===== HEADER ===== */
+        header {
+            background:#0a3d62; color:white; padding:15px 20px;
+            display:flex; justify-content:space-between; align-items:center;
+            position:fixed; top:0; left:0; width:100%; z-index:1000;
+            height: 70px; /* Define fixed height */
+        }
+        header h2 { font-size:22px; }
+        .back-btn, .menu-btn { padding:10px 15px; background:#1e90ff; color:white; border:none; border-radius:5px; cursor:pointer; }
+
+        /* ===== DROPDOWN MENU ===== */
+        .menu-container { position:relative; }
+        .menu {
+            display:none; position:absolute; top:45px; right:0; background:#0a3d62;
+            border-radius:5px; width:180px; box-shadow:0 4px 8px rgba(0,0,0,0.2); z-index:1001;
+        }
+        .menu a { display:block; padding:10px 15px; color:white; text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.2); }
+        .menu a:last-child { border-bottom:none; }
+        .menu a:hover { background:#1e90ff; }
+
+        /* ===== CONTAINER (Desktop Default: 3 Columns) ===== */
+        .container { 
+            display:grid; 
+            grid-template-columns:repeat(3, 1fr); 
+            gap:20px; 
+            /* Only handles horizontal spacing and bottom margin now */
+            padding:20px 40px 40px; 
+        }
+
+        /* ===== CARD ===== */
+        .box { 
+            background:white; 
+            padding:25px; 
+            border-radius:10px; 
+            box-shadow:0 4px 10px rgba(0,0,0,0.1); 
+            /* Added for consistent card height and button placement */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .box h2 { color:#0a3d62; margin-bottom: 10px; }
+        /* Clean up redundant spacing from original HTML */
+        .box p, .box h4 { margin-bottom: 10px; } 
+        .box ul { margin-left:20px; margin-bottom: 20px; list-style: disc; }
+        .box ul li { margin-bottom: 5px; } 
+        button.apply-btn { 
+            width:100%; padding:10px; background:#1e90ff; color:white; 
+            border:none; cursor:pointer; border-radius:5px; 
+            margin-top:auto; /* Push button to the bottom */
+        }
+        button.apply-btn:hover { background:#0b6edc; }
+
+        /* ===== CUSTOM ALERT/CONFIRMATION STYLES (Copied) ===== */
+        #custom-alert-overlay, #custom-confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .custom-alert-box, .custom-confirm-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .custom-alert-box h4, .custom-confirm-box h4 {
+            margin-bottom: 20px;
+            color: #0a3d62;
+            font-size: 18px;
+        }
+
+        .custom-alert-box button, .custom-confirm-box button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .custom-alert-box button {
+            background: #1e90ff;
+            color: white;
+        }
+
+        .custom-confirm-box .confirm-yes {
+            background: #4CAF50; /* Green */
+            color: white;
+        }
+
+        .custom-confirm-box .confirm-no {
+            background: #f44336; /* Red */
+            color: white;
+        }
+        /* ================================================= */
+
+        /* ===== MODIFIED RESPONSIVE (Media Queries) ===== */
+        /* Tablet/Small Laptop: 3 -> 2 columns */
+        @media(max-width:992px){ 
+            .container{ 
+                grid-template-columns:repeat(2,1fr); 
+                padding:20px; 
+            } 
+        }
+        
+        /* Mobile: 2 -> 1 column */
+        @media(max-width:768px){ 
+            header h2{ font-size:18px; } 
+            .container{ 
+                grid-template-columns:1fr; 
+                padding:15px; 
+            } 
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <button onclick="goBack()" class="back-btn">⬅</button>
+    <h2>EDUCATIONAL INSURANCE</h2>
+    <div class="menu-container">
+        <button onclick="toggleMenu()" class="menu-btn">☰</button>
+        <div id="menu" class="menu">
+            <a href="index.html">Home</a>
+            <a href="plans.html">Plans</a>
+            <a href="calculator.html">Calculator</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="box">
+        <h2>Child Education Plan</h2><br>
+        <p><strong>Coverage:</strong> Child’s higher education expenses</p><br>
+        <p>Premium: ₹1,200 / month</p><br>
+        <h4>Benefits</h4><br>
+        <ul>
+            <li>Secures child’s education</li><br>
+            <li>Guaranteed payouts at milestones</li><br>
+            <li>Waiver of premium on parent’s death</li><br>
+        </ul>
+        <button class="apply-btn" onclick="apply('Child Education Plan','₹1,200 / month')">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Higher Education Protection Plan</h2><br>
+        <p><strong>Coverage:</strong> Graduation & post-graduation</p><br>
+        <p>Premium: ₹1,500 / month</p><br>
+        <h4>Benefits</h4><br>
+        <ul>
+            <li>Funds higher studies</li><br>
+            <li>Flexible payout options</li><br>
+            <li>Life cover for parent</li><br>
+        </ul>
+        <button class="apply-btn" onclick="apply('Higher Education Protection Plan','₹1,500 / month')">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Education Savings Insurance</h2><br>
+        <p><strong>Coverage:</strong> Long-term education savings</p><br>
+        <p>Premium: ₹900 / month</p><br>
+        <h4>Benefits</h4><br>
+        <ul>
+            <li>Disciplined savings</li><br>
+            <li>Assured maturity benefit</li><br>
+            <li>Tax benefits under Section 80C</li><br>
+        </ul>
+        <button class="apply-btn" onclick="apply('Education Savings Insurance','₹900 / month')">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Overseas Education Insurance</h2><br>
+        <p><strong>Coverage:</strong> Studies abroad</p><br>
+        <p>Premium: ₹2,000 / month</p><br>
+        <h4>Benefits</h4><br>
+        <ul>
+            <li>Supports international education</li><br>
+            <li>High sum assured</li><br>
+            <li>Premium waiver benefit</li><br>
+        </ul>
+        <button class="apply-btn" onclick="apply('Overseas Education Insurance','₹2,000 / month')">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Scholarship Linked Education Plan</h2><br>
+        <p><strong>Coverage:</strong> Education milestones</p><br>
+        <p>Premium: ₹1,100 / month</p><br>
+        <h4>Benefits</h4><br>
+        <ul>
+            <li>Regular payouts during education</li><br>
+            <li>Bonus on policy maturity</li><br>
+            <li>Financial stability for child</li><br>
+        </ul>
+        <button class="apply-btn" onclick="apply('Scholarship Linked Education Plan','₹1,100 / month')">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Single Premium Education Plan</h2><br>
+        <p><strong>Coverage:</strong> One-time investment for education</p><br>
+        <p>Premium: ₹2,50,000 (one-time)</p><br>
+        <h4>Benefits</h4><br>
+        <ul>
+            <li>One-time premium payment</li><br>
+            <li>Guaranteed education fund</li><br>
+            <li>No future premium burden</li><br>
+        </ul>
+        <button class="apply-btn" onclick="apply('Single Premium Education Plan','₹2,50,000')">Apply Now</button>
+    </div>
+
+</div>
+
+<div id="custom-alert-overlay" onclick="hideAlert(event)">
+    <div class="custom-alert-box">
+        <h4 id="custom-alert-message"></h4>
+        <button onclick="hideAlert()">OK</button>
+    </div>
+</div>
+
+<div id="custom-confirm-overlay" onclick="dismissConfirm(event)">
+    <div class="custom-confirm-box">
+        <h4 id="custom-confirm-message"></h4>
+        <button class="confirm-yes" onclick="handleConfirm(true)">Yes</button>
+        <button class="confirm-no" onclick="handleConfirm(false)">No</button>
+    </div>
+</div>
+
+<script>
+// Global variable for storing redirect URL and confirmation callback
+window._alertRedirect = null;
+window._confirmCallback = null;
+
+// New custom alert functions
+function showAlert(message, redirectUrl) {
+    document.getElementById('custom-alert-message').innerText = message;
+    window._alertRedirect = redirectUrl || null;
+    document.getElementById('custom-alert-overlay').style.display = 'flex';
+}
+
+function hideAlert(event) {
+    const overlay = document.getElementById('custom-alert-overlay');
+    // Only close/redirect if the click is on the OK button or the overlay itself
+    if (event && event.target !== overlay && event.target.tagName.toLowerCase() !== 'button') {
+        return;
+    }
+    
+    overlay.style.display = 'none';
+    
+    if (window._alertRedirect) {
+        window.location.href = window._alertRedirect;
+        window._alertRedirect = null;
+    }
+}
+
+// New custom confirmation functions
+function showConfirm(message, callback) {
+    document.getElementById('custom-confirm-message').innerText = message;
+    window._confirmCallback = callback;
+    document.getElementById('custom-confirm-overlay').style.display = 'flex';
+}
+
+function handleConfirm(isConfirmed) {
+    document.getElementById('custom-confirm-overlay').style.display = 'none';
+
+    if (window._confirmCallback) {
+        window._confirmCallback(isConfirmed);
+        window._confirmCallback = null; // Clear the callback after execution
+    }
+}
+
+// Function to dismiss confirm when clicking the overlay (No action taken)
+function dismissConfirm(event) {
+    const overlay = document.getElementById('custom-confirm-overlay');
+    if (event.target === overlay) {
+        overlay.style.display = 'none';
+        window._confirmCallback = null; 
+    }
+}
+
+function toggleMenu() {
+    const menu = document.getElementById("menu");
+    menu.style.display = (menu.style.display==="block") ? "none" : "block";
+}
+
+function goBack() {
+    if(window.history.length>1) history.back();
+    else location.href="index.html";
+}
+
+// UPDATED: Now uses showConfirm
+function logout() { 
+    showConfirm("Are you sure you want to log out?", (confirmed) => {
+        if (confirmed) {
+            // Placeholder for actual logout logic (clearing local storage/session)
+            // localStorage.removeItem("isLoggedIn");
+            showAlert("Logged out successfully! Redirecting to home.", "index.html");
+        }
+    });
+}
+
+// ===== APPLY FUNCTION (UPDATED: Now uses showAlert) =====
+function apply(planName, price) {
+    let dashboard = JSON.parse(localStorage.getItem("dashboardPlans")) || [];
+    dashboard.push({name: planName, price: price, status:"Pending Payment"});
+    localStorage.setItem("dashboardPlans", JSON.stringify(dashboard));
+    
+    // Using custom showAlert instead of alert()
+    showAlert(`✅ "${planName}" added to Dashboard!`, "dashboard.html");
+}
+</script>
+
+</body>
+</html>

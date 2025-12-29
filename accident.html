@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Accident Insurance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            overflow-x: hidden;
+            /* body padding-top is now the clearance for the fixed header */
+            padding-top: 70px; 
+        }
+
+        /* ================= HEADER ================= */
+        header {
+            background-color: #0a3d62;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            height: 70px; /* Explicit height for better calculation */
+        }
+
+        h2 {
+            font-size: 22px;
+        }
+
+        .back-btn,
+        .menu-btn {
+            padding: 10px 15px;
+            background: #1e90ff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* ================= MENU ================= */
+        .menu-container {
+            position: relative;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background-color: #0a3d62;
+            border-radius: 5px;
+            width: 180px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .menu a {
+            display: block;
+            padding: 10px 15px;
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .menu a:hover {
+            background-color: #1e90ff;
+        }
+
+        /* ================= CONTAINER (Desktop Default: 3 Columns) ================= */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            /* Container padding now only controls horizontal spacing and bottom margin */
+            padding: 20px 40px 40px; 
+        }
+
+        /* ================= CARD ================= */
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            /* Added for consistent card height and button placement */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .box h2 {
+            color: #0a3d62;
+            margin-bottom: 10px;
+        }
+
+        .box ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+            list-style: disc;
+        }
+        
+        /* Consistent spacing and removed redundant <br> spacing */
+        .box p, .box h2, .box ul {
+            margin-bottom: 10px;
+        }
+
+        .apply-btn {
+            width: 100%;
+            padding: 10px;
+            background: #1e90ff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: auto; /* Push button to the bottom */
+        }
+
+        /* ================= POPUPS ================= */
+        .alert-overlay,
+        .confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .alert-box,
+        .confirm-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .alert-box p,
+        .confirm-box p {
+            margin-bottom: 20px;
+        }
+
+        .alert-box button,
+        .confirm-box button {
+            background-color: #0a3d62;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .cancel-btn {
+            background-color: #feca57;
+            color: black;
+        }
+
+        /* ================= MODIFIED RESPONSIVE ================= */
+        /* Tablet/Small Laptop: 3 -> 2 columns */
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 20px;
+            }
+        }
+
+        /* Mobile: 2 -> 1 column */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <button onclick="goBack()" class="back-btn">⬅</button>
+    <h2>ACCIDENT INSURANCE</h2>
+    <div class="menu-container">
+        <button onclick="toggleMenu()" class="menu-btn">☰</button>
+        <div id="menu" class="menu">
+            <a href="index.html">Home</a>
+            <a href="#" onclick="checkLogin('plans.html')">Plans</a>
+            <a href="#" onclick="checkLogin('dashboard.html')">Dashboard</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="box">
+        <h2>Personal Accident Insurance</h2><br>
+        <p><strong>Coverage:</strong> Accidental death & disability</p><br>
+        <p>Premium: ₹299 / year</p><br>
+        <ul>
+            <li>24×7 worldwide cover</li><br>
+            <li>Permanent disability benefit</li><br>
+            <li>Lump sum payout</li><br>
+        </ul>
+        <button class="apply-btn"
+            onclick="applyPlan('Personal Accident Insurance', 299)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Family Accident Insurance</h2><br>
+        <p><strong>Coverage:</strong> Entire family</p><br>
+        <p>Premium: ₹699 / year</p><br>
+        <ul>
+            <li>Single policy for family</li><br>
+            <li>Death & disability cover</li><br>
+            <li>Cost-effective protection</li><br>
+        </ul>
+        <button class="apply-btn"
+            onclick="applyPlan('Family Accident Insurance', 699)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Accidental Disability Plan</h2><br>
+        <p><strong>Coverage:</strong> Temporary & permanent disability</p><br>
+        <p>Premium: ₹499 / year</p><br>
+        <ul>
+            <li>Income replacement benefit</li><br>
+            <li>Partial disability cover</li><br>
+            <li>Financial security</li><br>
+        </ul>
+        <button class="apply-btn"
+            onclick="applyPlan('Accidental Disability Plan', 499)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Accident Insurance with Hospital Cover</h2><br>
+        <p><strong>Coverage:</strong> Accident + medical expenses</p><br>
+        <p>Premium: ₹899 / year</p><br>
+        <ul>
+            <li>Hospitalization expenses</li><br>
+            <li>Emergency treatment cover</li><br>
+            <li>Cashless hospitalization</li><br>
+        </ul>
+        <button class="apply-btn"
+            onclick="applyPlan('Accident Hospital Cover', 899)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Student Accident Insurance</h2><br>
+        <p><strong>Coverage:</strong> School & college students</p><br>
+        <p>Premium: ₹199 / year</p><br>
+        <ul>
+            <li>Accidental injury protection</li><br>
+            <li>Education continuity support</li><br>
+            <li>Low-cost student cover</li><br>
+        </ul>
+        <button class="apply-btn"
+            onclick="applyPlan('Student Accident Insurance', 199)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Employee Accident Insurance</h2><br>
+        <p><strong>Coverage:</strong> Workplace accidents</p><br>
+        <p>Premium: ₹999 / year</p><br>
+        <ul>
+            <li>On-duty accident coverage</li><br>
+            <li>Medical expense reimbursement</li><br>
+            <li>Employer liability protection</li><br>
+        </ul>
+        <button class="apply-btn"
+            onclick="applyPlan('Employee Accident Insurance', 999)">Apply Now</button>
+    </div>
+
+</div>
+
+<div id="custom-alert-overlay" class="alert-overlay">
+    <div class="alert-box">
+        <p id="alert-message"></p>
+        <button onclick="hideAlert()">OK</button>
+    </div>
+</div>
+
+<div id="custom-confirm-overlay" class="confirm-overlay">
+    <div class="confirm-box">
+        <p id="confirm-message"></p>
+        <button onclick="handleConfirm(true)">Yes</button>
+        <button class="cancel-btn" onclick="handleConfirm(false)">No</button>
+    </div>
+</div>
+
+<script>
+    function showAlert(msg, redirect=null) {
+        document.getElementById("alert-message").innerText = msg;
+        document.getElementById("custom-alert-overlay").style.display = "flex";
+        window._redirect = redirect;
+    }
+
+    function hideAlert() {
+        document.getElementById("custom-alert-overlay").style.display = "none";
+        if (window._redirect) window.location.href = window._redirect;
+    }
+
+    function showConfirm(msg, cb) {
+        document.getElementById("confirm-message").innerText = msg;
+        document.getElementById("custom-confirm-overlay").style.display = "flex";
+        window._confirm = cb;
+    }
+
+    function handleConfirm(res) {
+        document.getElementById("custom-confirm-overlay").style.display = "none";
+        window._confirm && window._confirm(res);
+    }
+
+    (function () {
+        if (localStorage.getItem("isLoggedIn") !== "true") {
+            showAlert("🔒 Please login to access Accident Insurance", "login.html");
+        }
+    })();
+
+    function toggleMenu() {
+        const m = document.getElementById("menu");
+        m.style.display = m.style.display === "block" ? "none" : "block";
+    }
+
+    function goBack() {
+        history.back();
+    }
+
+    function logout() {
+        showConfirm("Are you sure you want to logout?", ok => {
+            if (ok) {
+                localStorage.clear();
+                showAlert("Logged out successfully", "index.html");
+            }
+        });
+    }
+
+    function checkLogin(page) {
+        localStorage.getItem("isLoggedIn") === "true"
+            ? location.href = page
+            : showAlert("Please login first", "login.html");
+    }
+
+    function applyPlan(name, price) {
+        let plans = JSON.parse(localStorage.getItem("dashboardPlans")) || [];
+        plans.push({ name, price, status: "Pending Payment" });
+        localStorage.setItem("dashboardPlans", JSON.stringify(plans));
+        showAlert("✅ Plan added to Dashboard!");
+    }
+</script>
+
+</body>
+</html>

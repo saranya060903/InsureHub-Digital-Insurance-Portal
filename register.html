@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Registration | InsureHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #0a3d62, #1e90ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        /* New Back Button Styling */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 15px;
+            background: #1e90ff; 
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            z-index: 2;
+        }
+
+        .form-box {
+            background: white;
+            padding: 30px;
+            width: 350px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            z-index: 1; 
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0a3d62;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #0a3d62;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        p {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        a {
+            color: #1e90ff;
+            text-decoration: none;
+        }
+
+        /* Custom Popup Styles */
+        .alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none; /* Initially hidden */
+            justify-content: center;
+            align-items: center;
+            z-index: 10000; /* High z-index */
+        }
+
+        .alert-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .alert-box p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .alert-box button {
+            background-color: #0a3d62;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<button class="back-btn" onclick="goBack()">⬅ Back</button>
+
+<div class="form-box">
+    <h2>Create Account</h2>
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="register()">Register</button>
+    <p>Already have an account? <a href="login.html">Login</a></p>
+</div>
+
+<div id="custom-alert-overlay" class="alert-overlay" onclick="hideAlert(event)">
+    <div id="custom-alert-box" class="alert-box">
+        <p id="alert-message"></p>
+        <button id="alert-ok-button" onclick="hideAlert()">OK</button>
+    </div>
+</div>
+
+<script>
+    // Custom Alert Functions
+    function showAlert(message, redirectUrl = null) {
+        document.getElementById('alert-message').innerText = message;
+        document.getElementById('custom-alert-overlay').style.display = 'flex';
+        window._alertRedirect = redirectUrl;
+    }
+
+    // Function to close the alert.
+    function hideAlert(event) {
+        const overlay = document.getElementById('custom-alert-overlay');
+
+        if (event && event.target === overlay) {
+            // User clicked the dark background (outside the box).
+            // Close the alert immediately, but DO NOT redirect.
+            overlay.style.display = 'none';
+            return;
+        }
+        
+        // If the 'OK' button was clicked (or hideAlert was called without an event).
+        overlay.style.display = 'none';
+
+        if (window._alertRedirect) {
+            window.location.href = window._alertRedirect;
+            window._alertRedirect = null;
+        }
+    }
+    
+    // Back Button Function (NEW)
+    function goBack() {
+        window.history.back();
+    }
+
+    function register() {
+        let name = document.getElementById("name").value;
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+
+        if (name === "" || email === "" || password === "") {
+            showAlert("All fields are required");
+            return;
+        }
+
+        // --- Multi-User Fix: Use array storage ---
+        let allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+
+        // Check if user with this email already exists
+        const existingUser = allUsers.find(u => u.email === email);
+        if (existingUser) {
+            showAlert("This email is already registered. Please log in.", "login.html");
+            return;
+        }
+
+        let user = {
+            name: name,
+            email: email,
+            password: password
+        };
+
+        // Add the new user to the array
+        allUsers.push(user);
+
+        // Store the updated array back in local storage
+        localStorage.setItem("allUsers", JSON.stringify(allUsers));
+
+        showAlert("Registration successful! Redirecting to login.", "login.html");
+    }
+</script>
+
+</body>
+</html>

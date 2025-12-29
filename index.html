@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Digital Insurance Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: #0a3d62;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #feca57;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+        }
+
+        /* Container for user name and button */
+        .user-auth {
+            display: flex;
+            align-items: center;
+            color: white;
+            margin-left: 20px;
+        }
+
+        .user-auth span {
+            margin-right: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #feca57;
+        }
+
+        .user-auth button.btn {
+            background-color: #feca57;
+            color: #000;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(to right, #0a3d62, #1e90ff);
+            color: white;
+            padding: 80px 40px 40px 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .hero button {
+            background-color: #feca57;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* HERO IMAGE */
+        .hero-image img {
+            max-width: 420px;
+            width: 100%;
+        }
+
+        /* --- BACKGROUND IMAGE WRAPPER (Services to Footer) --- */
+        .main-content-wrapper { 
+            /* * IMPORTANT: Ensure 'insurance-bg.jpg' is in the same folder 
+             * as this HTML file.
+             */
+            background-image: url(i); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Creates the parallax effect */
+        }
+        /* ---------------------------------------------------- */
+
+        /* SERVICES */
+        .services {
+            padding: 60px 40px;
+            text-align: center;
+            border: none; 
+            margin: 0; 
+            background-color: transparent; /* Allows the background image to show through */
+        }
+
+        .services h2 {
+            margin-bottom: 40px;
+            color: #0a3d62; 
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7); 
+        }
+
+        .service-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        /* CARD (Translucent white background for readability) */
+        .card {
+            background: rgba(255, 255, 255, 0.9); 
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2); 
+            cursor: pointer;
+            border: 2px solid #ddd; 
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border-color: #1e90ff; 
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: #0a3d62;
+        }
+
+        .card.active {
+            border: 2px solid #1e90ff;
+            transform: scale(1.05);
+        }
+
+        /* WHY US */
+        .why-us {
+            padding: 50px 40px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8); /* Slight white background for readability */
+        }
+
+        .why-us ul {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .why-us li {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: #0a3d62;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+        }
+
+        /* Custom Popup Styles */
+        .alert-overlay, .confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 10000; 
+        }
+        
+        .confirm-overlay {
+            z-index: 10001; 
+        }
+        
+        .alert-box, .confirm-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .alert-box p, .confirm-box p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .alert-box button, .confirm-box button {
+            background-color: #0a3d62;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+        
+        .confirm-box .cancel-btn {
+            background-color: #feca57;
+            color: #000;
+        }
+    
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 15px 20px;
+                text-align: center;
+            }
+            nav {
+                margin-top: 10px;
+            }
+            nav a {
+                margin: 8px;
+                display: inline-block;
+            }
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 60px 20px 20px 20px;
+            }
+            .hero h1 {
+                font-size: 28px;
+            }
+            .service-cards {
+                grid-template-columns: 1fr;
+            }
+            .card.active {
+                transform: scale(1);
+            }
+            .user-auth {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body onload="updateAuthUI()">
+
+<header>
+    <div class="logo">Insure<span>Hub</span></div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="#" onclick="checkLogin('dashboard.html')">Dashboard</a>
+        <a href="#" onclick="checkLogin('plans.html')">Plans</a>
+        <a href="#" onclick="checkLogin('calculator.html')">Calculator</a>
+    </nav>
+    <div class="user-auth" id="auth-container">
+        <button class="btn" onclick="window.location.href='login.html'">Login</button>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Secure Your Future<br>With Smart Insurance</h1>
+        <p>
+            A digital platform to explore insurance plans, calculate premiums,
+            and apply for policies easily and securely.
+        </p>
+        <button onclick="getStarted()">Get Started</button>
+    </div>
+    <div class="hero-image">
+        <img src="insurance.png" alt="Insurance Image">
+    </div>
+</section>
+
+<div class="main-content-wrapper"> 
+
+    <section class="services">
+    
+        <h2>Our Insurance Services</h2>
+
+        <div class="service-cards">
+            <div class="card" onclick="openService('health', this)">
+                <h3>Health Insurance</h3>
+                <p>Cashless hospitalization and medical coverage.</p>
+            </div>
+            <div class="card" onclick="openService('life insurance', this)">
+                <h3>Life Insurance</h3>
+                <p>Secure your family’s financial future.</p>
+            </div>
+            <div class="card" onclick="openService('vehicle', this)">
+                <h3>Vehicle Insurance</h3>
+                <p>Protection for cars and two-wheelers.</p>
+            </div>
+            <div class="card" onclick="openService('home', this)">
+                <h3>Home Insurance</h3>
+                <p>Coverage against damage and disasters.</p>
+            </div>
+            <div class="card" onclick="openService('travel', this)">
+                <h3>Travel Insurance</h3>
+                <p>Covers medical emergencies and trip issues during travel.</p>
+            </div>
+            <div class="card" onclick="openService('term', this)">
+                <h3>Term Insurance</h3>
+                <p>Offers high life coverage at a low premium for a fixed period.</p>
+            </div>
+            <div class="card" onclick="openService('accident', this)">
+                <h3>Accident Insurance</h3>
+                <p>Provides compensation in case of accidental injury or death.</p>
+            </div>
+            <div class="card" onclick="openService('educational', this)">
+                <h3>Education Insurance</h3>
+                <p>Ensures education expenses are covered despite financial risks.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-us">
+        <h2>Why Choose InsureHub?</h2>
+        <ul>
+            <li>✔ 100% Digital Process</li>
+            <li>✔ Instant Premium Calculation</li>
+            <li>✔ Secure Policy Management</li>
+            <li>✔ Easy Application Tracking</li>
+        </ul>
+    </section>
+
+</div>
+<footer>
+    <p>© 2025 InsureHub | Digital Insurance Portal</p>
+</footer>
+
+<div id="custom-alert-overlay" class="alert-overlay" onclick="hideAlert(event)">
+    <div id="custom-alert-box" class="alert-box">
+        <p id="alert-message"></p>
+        <button id="alert-ok-button" onclick="hideAlert()">OK</button>
+    </div>
+</div>
+
+<div id="custom-confirm-overlay" class="confirm-overlay">
+    <div id="custom-confirm-box" class="confirm-box">
+        <p id="confirm-message">Are you sure you want to log out?</p>
+        <button onclick="handleConfirm(true)">Yes</button>
+        <button class="cancel-btn" onclick="handleConfirm(false)">No</button>
+    </div>
+</div>
+
+<script>
+    // --- Custom Alert and Confirm Functions ---
+    
+    // Function to display a custom alert message
+    function showAlert(message, redirectUrl = null) {
+        document.getElementById('alert-message').innerText = message;
+        document.getElementById('custom-alert-overlay').style.display = 'flex';
+        window._alertRedirect = redirectUrl;
+    }
+
+    // Function to close the alert. Redirects if a URL was provided.
+    function hideAlert(event) {
+        const overlay = document.getElementById('custom-alert-overlay');
+
+        if (event && event.target === overlay) {
+            // User clicked the dark background (outside the box).
+            overlay.style.display = 'none';
+            return;
+        }
+        
+        overlay.style.display = 'none';
+
+        if (window._alertRedirect) {
+            window.location.href = window._alertRedirect;
+            window._alertRedirect = null;
+        }
+    }
+    
+    // Function to display a custom confirmation box
+    function showConfirm(message, callback) {
+        document.getElementById('confirm-message').innerText = message;
+        document.getElementById('custom-confirm-overlay').style.display = 'flex';
+        window._confirmCallback = callback;
+    }
+
+    // Handles the confirmation response (Yes/No)
+    function handleConfirm(isConfirmed) {
+        document.getElementById('custom-confirm-overlay').style.display = 'none';
+        if (window._confirmCallback) {
+            window._confirmCallback(isConfirmed);
+            window._confirmCallback = null;
+        }
+    }
+
+    // --- Authentication Logic ---
+
+    // Updates the Login/Logout button and user greeting in the header
+    function updateAuthUI() {
+        const authContainer = document.getElementById("auth-container");
+        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        const currentUserEmail = localStorage.getItem("currentUserEmail");
+        
+        authContainer.innerHTML = ''; 
+
+        if (isLoggedIn && currentUserEmail) {
+            // Placeholder: Replace with actual user fetching logic if needed
+            const allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
+            const storedUser = allUsers.find(u => u.email === currentUserEmail);
+
+            if (storedUser) {
+                // Display first name only
+                const userName = storedUser.name ? storedUser.name.split(' ')[0] : 'User'; 
+                authContainer.innerHTML = `
+                    <span>Hello, ${userName}</span>
+                    <button class="btn" onclick="logout()">Logout</button>
+                `;
+                return;
+            }
+        }
+        
+        // Default: Show Login button
+        authContainer.innerHTML = `
+            <button class="btn" onclick="window.location.href='login.html'">Login</button>
+        `;
+    }
+
+    // Handles the logout process using confirmation
+    function logout() {
+        showConfirm("Are you sure you want to log out?", (confirmed) => {
+            if (confirmed) {
+                localStorage.removeItem("isLoggedIn");
+                localStorage.removeItem("currentUserEmail"); 
+                
+                updateAuthUI();
+                // Redirect to home after successful logout
+                showAlert("Logged out successfully! Redirecting to home.", "index.html");
+            }
+        });
+    }
+
+    // Checks login status before navigating to protected pages
+    function checkLogin(targetPage) {
+        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        if (isLoggedIn) {
+            window.location.href = targetPage;
+        } else {
+            showAlert("🔒 Please login or register to access this page.", "login.html");
+        }
+    }
+
+    function getStarted() {
+        showAlert("Redirecting to Registration Page to get started...", "register.html");
+    }
+
+    // Handles opening a specific insurance service (requires login)
+    function openService(type, element) {
+        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+        if (!isLoggedIn) {
+            showAlert("🔒 Please login to view insurance plans.", "login.html");
+            return;
+        }
+
+        // Toggle active class on cards
+        document.querySelectorAll(".card").forEach(card => {
+            card.classList.remove("active");
+        });
+        element.classList.add("active");
+
+        // Navigate to the specific service page
+        window.location.href = type + ".html";
+    }
+
+    // Initialize UI on page load
+    window.addEventListener('load', updateAuthUI);
+</script>
+
+</body>
+</html>

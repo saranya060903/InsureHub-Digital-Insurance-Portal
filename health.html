@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Health Insurance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            overflow-x: hidden;
+            padding-top: 70px;
+        }
+
+        /* ================= HEADER ================= */
+        header {
+            background-color: #0a3d62;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        h2 {
+            font-size: 22px;
+        }
+
+        .back-btn,
+        .menu-btn {
+            padding: 10px 15px;
+            background: #1e90ff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* ================= MENU ================= */
+        .menu-container {
+            position: relative;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background-color: #0a3d62;
+            border-radius: 5px;
+            width: 180px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .menu a {
+            display: block;
+            padding: 10px 15px;
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .menu a:hover {
+            background-color: #1e90ff;
+        }
+
+        /* ================= CONTAINER (Desktop Default: 3 Columns) ================= */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 40px;
+        }
+
+        /* ================= CARD ================= */
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .box h2 {
+            color: #0a3d62;
+            margin-bottom: 10px;
+        }
+
+        .box p {
+            margin-bottom: 8px;
+        }
+        
+        .box ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            list-style: disc;
+        }
+
+        .box ul li {
+            margin-bottom: 5px;
+        }
+
+        .apply-btn {
+            width: 100%;
+            padding: 10px;
+            background: #1e90ff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: auto;
+        }
+        
+        /* Custom Popup Styles (kept for completeness) */
+        .alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .alert-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .alert-box p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .alert-box button {
+            background-color: #0a3d62;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+        }
+        
+        .confirm-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .confirm-box button {
+            background-color: #0a3d62;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 0 5px; 
+        }
+        
+        .confirm-box .cancel-btn {
+            background-color: #feca57;
+            color: #000;
+        }
+
+        /* ================= STREAMLINED RESPONSIVE (Targeting Mobile Devices) ================= */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 18px;
+            }
+            .container {
+                /* Changes directly from 3 columns to 1 column for mobile phones */
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <button onclick="goBack()" class="back-btn">⬅</button>
+    <h2>HEALTH INSURANCE</h2>
+    <div class="menu-container">
+        <button onclick="toggleMenu()" class="menu-btn">☰</button>
+        <div id="menu" class="menu">
+            <a href="index.html">Home</a>
+            <a href="#" onclick="checkLogin('plans.html')">Plans</a>
+            <a href="#" onclick="checkLogin('dashboard.html')">Dashboard</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="box">
+        <h2>Family Floater Plan</h2><br>
+        <p><strong>Coverage:</strong> ₹10 – ₹25 Lakhs</p><br>
+        <p>Premium: ₹10,000 / year</p><br>
+        <ul>
+            <li>Covers whole family</li><br>
+            <li>Cost-effective</li><br>
+            <li>Tax benefits</li><br>
+        </ul>
+        <button class="apply-btn"
+            onclick="applyPlan('Family Floater Plan', 10000)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Individual Health Plan</h2><br>
+        <p><strong>Coverage:</strong> ₹5 – ₹20 Lakhs</p><br>
+        <p>Premium: ₹6,000 / year</p><br>
+        <ul>
+            <li>Cashless hospitalization</li><br>
+            <li>Pre & post hospitalization</li><br>
+            <li>Hospitalization coverage</li><br>
+        </ul>
+        <button class="apply-btn"
+            onclick="applyPlan('Individual Health Plan', 6000)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Critical Illness Plan</h2><br>
+        <p><strong>Coverage:</strong> ₹5 – ₹10 Lakhs</p><br>
+        <p>Premium: ₹8,000 / year</p><br>
+        <ul>
+            <li>Major illness cover</li><br>
+            <li>Lump sum payout</li><br>
+            <li>Hospitalization coverage</li><br>
+        </ul>
+        <button class="apply-btn"
+            onclick="applyPlan('Critical Illness Plan', 8000)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Senior Citizen Health Plan</h2><br>
+        <p><strong>Coverage:</strong> ₹15 – ₹30 Lakhs</p><br>
+        <p>Premium: ₹10,000 / year</p><br>
+        <ul>
+            <li>Pre-existing disease cover</li><br>
+            <li>Annual health checkups</li><br>
+            <li>Hospitalization coverage</li><br>
+        </ul>
+        <button class="apply-btn"
+            onclick="applyPlan('Senior Citizen Health Plan', 10000)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Maternity Health Plan</h2><br>
+        <p><strong>Coverage:</strong> ₹4 – ₹7 Lakhs</p><br>
+        <p>Premium: ₹9,000 / year</p><br>
+        <ul>
+            <li>Delivery expenses</li><br>
+            <li>Newborn care</li><br>
+            <li>Waiting period applies</li><br>
+        </ul>
+        <button class="apply-btn"
+            onclick="applyPlan('Maternity Health Plan', 9000)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Top-Up Health Plan</h2><br>
+        <p><strong>Coverage:</strong> ₹15 – ₹20 Lakhs</p><br>
+        <p>Premium: ₹4,000 / year</p><br>
+        <ul>
+            <li>High coverage at low cost</li><br>
+            <li>Acts as an extension to base policy</li><br>
+            <li>Subject to a deductible</li><br>
+        </ul>
+        <button class="apply-btn"
+            onclick="applyPlan('Top-Up Health Plan', 4000)">Apply Now</button>
+    </div>
+
+</div>
+
+<div id="custom-alert-overlay" class="alert-overlay" onclick="hideAlert(event)">
+    <div id="custom-alert-box" class="alert-box">
+        <p id="alert-message"></p>
+        <button id="alert-ok-button" onclick="hideAlert()">OK</button>
+    </div>
+</div>
+
+<div id="custom-confirm-overlay" class="confirm-overlay">
+    <div id="custom-confirm-box" class="confirm-box">
+        <p id="confirm-message">Are you sure you want to log out?</p>
+        <button onclick="handleConfirm(true)">Yes</button>
+        <button class="cancel-btn" onclick="handleConfirm(false)">No</button>
+    </div>
+</div>
+
+<script>
+    // Custom Alert Functions
+    function showAlert(message, redirectUrl = null) {
+        document.getElementById('alert-message').innerText = message;
+        document.getElementById('custom-alert-overlay').style.display = 'flex';
+        window._alertRedirect = redirectUrl;
+    }
+
+    // Function to close the alert.
+    function hideAlert(event) {
+        const overlay = document.getElementById('custom-alert-overlay');
+
+        if (event && event.target === overlay) {
+            // User clicked the dark background (outside the box).
+            overlay.style.display = 'none';
+            return;
+        }
+        
+        // If the 'OK' button was clicked (or hideAlert was called without an event).
+        overlay.style.display = 'none';
+
+        if (window._alertRedirect) {
+            window.location.href = window._alertRedirect;
+            window._alertRedirect = null;
+        }
+    }
+    
+    // Custom Confirm Functions
+    function showConfirm(message, callback) {
+        document.getElementById('confirm-message').innerText = message;
+        document.getElementById('custom-confirm-overlay').style.display = 'flex';
+        window._confirmCallback = callback;
+    }
+
+    function handleConfirm(isConfirmed) {
+        document.getElementById('custom-confirm-overlay').style.display = 'none';
+        if (window._confirmCallback) {
+            window._confirmCallback(isConfirmed);
+            window._confirmCallback = null;
+        }
+    }
+
+
+// Check for login status on page load
+(function checkLoginOnLoad() {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    if (!isLoggedIn) {
+        showAlert("🔒 Access Denied. Please login to view plan details.", "login.html");
+    }
+})();
+
+function toggleMenu() {
+    const menu = document.getElementById("menu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+function goBack() {
+    window.history.back();
+}
+
+// Function to handle logout (Updated to use showConfirm)
+function logout() {
+    showConfirm("Are you sure you want to log out?", (confirmed) => {
+        if (confirmed) {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("currentUserEmail");
+            showAlert("Logged out successfully! Redirecting to home.", "index.html");
+        }
+    });
+}
+
+function checkLogin(targetPage) {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    if (isLoggedIn) {
+        window.location.href = targetPage;
+    } else {
+        showAlert("🔒 Please login to access this page.", "login.html");
+    }
+}
+
+
+/* ===== APPLY LOGIC ===== */
+function applyPlan(planName, price) {
+    let dashboard = JSON.parse(localStorage.getItem("dashboardPlans")) || [];
+
+    dashboard.push({
+        name: planName,
+        price: price,
+        status: "Pending Payment"
+    });
+
+    localStorage.setItem("dashboardPlans", JSON.stringify(dashboard));
+
+    showAlert("✅ Plan added to Dashboard!");
+}
+</script>
+
+</body>
+</html>

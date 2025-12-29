@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Insurance Plans | InsureHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        header {
+            background-color: #0a3d62;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        nav a,
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            background: transparent;
+            border: none;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .back-btn {
+            padding: 6px 12px;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.15);
+            margin-right: 10px; /* Added spacing for logo text */
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* TITLE */
+        h1 {
+            text-align: center;
+            margin: 25px 0;
+            color: #0a3d62;
+        }
+
+        /* GRID */
+        .service-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 20px 40px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            color: #0a3d62;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        /* ===== CUSTOM ALERT/CONFIRMATION STYLES (UNCHANGED) ===== */
+        #custom-alert-overlay, #custom-confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        .custom-alert-box, .custom-confirm-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .custom-alert-box h4, .custom-confirm-box h4 {
+            margin-bottom: 20px;
+            color: #0a3d62;
+            font-size: 18px;
+        }
+
+        .custom-alert-box button, .custom-confirm-box button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .custom-alert-box button {
+            background: #1e90ff;
+            color: white;
+        }
+
+        .custom-confirm-box .confirm-yes {
+            background: #4CAF50; /* Green */
+            color: white;
+        }
+
+        .custom-confirm-box .confirm-no {
+            background: #f44336; /* Red */
+            color: white;
+        }
+        /* ================================================= */
+
+
+        /* ===== MODIFIED RESPONSIVE MEDIA QUERIES ===== */
+        /* Tablet View (Max 768px) */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 20px; /* Reduced side padding */
+            }
+
+            nav {
+                margin-top: 10px;
+                gap: 15px; /* Reduced gap */
+                width: 100%;
+                justify-content: space-between; /* Spread links */
+                flex-wrap: wrap;
+            }
+
+            .service-cards {
+                /* Keeps 2 columns, but reduces overall padding */
+                grid-template-columns: repeat(2, 1fr);
+                padding: 20px;
+            }
+        }
+        
+        /* Mobile View (Max 480px) */
+        @media (max-width: 480px) {
+             .logo {
+                font-size: 20px;
+            }
+
+            .back-btn {
+                padding: 5px 10px;
+            }
+
+            /* Stack cards into a single column */
+            .service-cards {
+                grid-template-columns: 1fr;
+                padding: 15px; /* Minimized padding */
+                gap: 15px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+            <button class="back-btn" onclick="goBack()">⬅ </button>
+        Insure<span style="color: darkorange;">Hub</span>
+    </div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="calculator.html">Calculator</a>
+        <a href="#" id="authLink">Login</a> 
+    </nav>
+</header>
+
+<h1>Available Insurance Plans</h1>
+
+<div class="service-cards">
+    <div class="card" onclick="openService('health.html')">Health Insurance</div>
+    <div class="card" onclick="openService('life insurance.html')">Life Insurance</div>
+    <div class="card" onclick="openService('vehicle.html')">Vehicle Insurance</div>
+    <div class="card" onclick="openService('home.html')">Home Insurance</div>
+    <div class="card" onclick="openService('travel.html')">Travel Insurance</div>
+    <div class="card" onclick="openService('term.html')">Term Insurance</div>
+    <div class="card" onclick="openService('accident.html')">Accident Insurance</div>
+    <div class="card" onclick="openService('educational.html')">Education Insurance</div>
+</div>
+
+<div id="custom-alert-overlay" onclick="hideAlert(event)">
+    <div class="custom-alert-box">
+        <h4 id="custom-alert-message"></h4>
+        <button onclick="hideAlert()">OK</button>
+    </div>
+</div>
+
+<div id="custom-confirm-overlay" onclick="dismissConfirm(event)">
+    <div class="custom-confirm-box">
+        <h4 id="custom-confirm-message"></h4>
+        <button class="confirm-yes" onclick="handleConfirm(true)">Yes</button>
+        <button class="confirm-no" onclick="handleConfirm(false)">No</button>
+    </div>
+</div>
+
+<script>
+    // Global variable for storing redirect URL and confirmation callback
+    window._alertRedirect = null;
+    window._._confirmCallback = null;
+
+    // Custom Alert Functions 
+    function showAlert(message, redirectUrl) {
+        document.getElementById('custom-alert-message').innerText = message;
+        window._alertRedirect = redirectUrl || null;
+        document.getElementById('custom-alert-overlay').style.display = 'flex';
+    }
+
+    function hideAlert(event) {
+        const overlay = document.getElementById('custom-alert-overlay');
+        if (event && event.target !== overlay && event.target.tagName.toLowerCase() !== 'button') {
+            return;
+        }
+        
+        overlay.style.display = 'none';
+        
+        if (window._alertRedirect) {
+            window.location.href = window._alertRedirect;
+            window._alertRedirect = null;
+        }
+        checkLoginStatus(); // Update header after alert/redirect
+    }
+
+    // Custom Confirmation Functions
+    function showConfirm(message, callback) {
+        document.getElementById('custom-confirm-message').innerText = message;
+        window._confirmCallback = callback;
+        document.getElementById('custom-confirm-overlay').style.display = 'flex';
+    }
+
+    function handleConfirm(isConfirmed) {
+        document.getElementById('custom-confirm-overlay').style.display = 'none';
+
+        if (window._confirmCallback) {
+            window._confirmCallback(isConfirmed);
+            window._confirmCallback = null; 
+        }
+    }
+
+    function dismissConfirm(event) {
+        const overlay = document.getElementById('custom-confirm-overlay');
+        if (event.target === overlay) {
+            overlay.style.display = 'none';
+            window._confirmCallback = null; 
+        }
+    }
+
+    function goBack() {
+        window.history.back();
+    }
+
+    function openService(page) {
+        window.location.href = page;
+    }
+
+    /* ===== AUTH LOGIC (LOGIN/LOGOUT) - UPDATED ===== */
+
+    function checkLoginStatus() {
+        // Check if the user is considered logged in
+        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        const authLink = document.getElementById("authLink");
+
+        if (isLoggedIn) {
+            authLink.innerText = "Logout";
+            // Use an onclick handler to trigger confirmation popup
+            authLink.onclick = logout;
+            authLink.href = "#"; 
+        } else {
+            authLink.innerText = "Login";
+            // Set href for direct navigation to the login page
+            authLink.href = "login.html"; 
+            authLink.onclick = null;
+        }
+    }
+
+    function logout() {
+        // Use the consistent showConfirm pattern
+        showConfirm("Are you sure you want to log out?", (confirmed) => {
+            if (confirmed) {
+                // Clear state
+                localStorage.removeItem("isLoggedIn");
+                localStorage.removeItem("currentUserEmail");
+                localStorage.removeItem("dashboardPlans"); 
+
+                // Use the consistent showAlert pattern with redirect
+                showAlert("Logged out successfully! Redirecting to login.", "login.html");
+            }
+        });
+    }
+
+    // Initialize the login status check on page load
+    checkLoginStatus();
+</script>
+
+</body>
+</html>

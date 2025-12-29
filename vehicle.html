@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vehicle Insurance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f8;
+            overflow-x: hidden;
+        }
+
+        /* ================= HEADER ================= */
+        header {
+            background-color: #0a3d62;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed; /* STICKY HEADER */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            height: 70px; /* Define fixed height for header */
+        }
+
+        h2 {
+            font-size: 22px;
+        }
+
+        .back-btn,
+        .menu-btn {
+            padding: 10px 15px;
+            background: #1e90ff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* ================= MENU DROPDOWN ================= */
+        .menu-container {
+            position: relative;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background-color: #0a3d62;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 180px;
+            z-index: 1001;
+        }
+
+        .menu a {
+            display: block;
+            padding: 10px 15px;
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .menu a:last-child {
+            border-bottom: none;
+        }
+
+        .menu a:hover {
+            background-color: #1e90ff;
+        }
+
+        /* ================= CONTAINER (Desktop Default: 3 Columns) ================= */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            /* Adjust padding based on fixed header height (70px + space) */
+            padding: 90px 40px 40px; 
+        }
+
+        /* ================= CARD ================= */
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: flex; /* Added for flexible layout */
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .box h2 {
+            color: #0a3d62;
+            margin-bottom: 10px;
+        }
+        
+        .box p, .box h4 {
+            margin-bottom: 8px; /* Consistent spacing */
+        }
+
+        .box ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            list-style: disc;
+        }
+
+        .box ul li {
+            margin-bottom: 6px;
+        }
+
+        button.apply-btn {
+            width: 100%;
+            padding: 10px;
+            background: #1e90ff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: auto; /* Pushes button to bottom */
+        }
+
+        button.apply-btn:hover {
+            background: #0b6edc;
+        }
+
+        /* Custom Popup Styles (Copied from previous examples) */
+        .alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none; /* Initially hidden */
+            justify-content: center;
+            align-items: center;
+            z-index: 10000; /* High z-index */
+        }
+
+        .alert-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .alert-box p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .alert-box button {
+            background-color: #0a3d62;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+        }
+        
+        .confirm-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .confirm-box button {
+            background-color: #0a3d62;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 0 5px; 
+        }
+        
+        .confirm-box .cancel-btn {
+            background-color: #feca57;
+            color: #000;
+        }
+
+
+        /* ================= MODIFIED MEDIA QUERY ================= */
+        /* Tablet/Small Laptop: 3 -> 2 columns */
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr);
+                /* Adjusted padding to avoid content being hidden under the fixed header */
+                padding: 90px 20px 20px;
+            }
+        }
+
+        /* Mobile: 2 -> 1 column */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 18px;
+            }
+            .container {
+                grid-template-columns: 1fr;
+                /* Adjusted padding to avoid content being hidden under the fixed header */
+                padding: 90px 15px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <button onclick="goBack()" class="back-btn">⬅</button>
+    <h2>VEHICLE INSURANCE</h2>
+    <div class="menu-container">
+        <button onclick="toggleMenu()" class="menu-btn">☰</button>
+        <div id="menu" class="menu">
+            <a href="index.html">Home</a>
+            <a href="plans.html">Plans</a>
+            <a href="calculator.html">Calculator</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="box">
+        <h2>Comprehensive Car Insurance</h2><br>
+        <p><strong>Coverage:</strong> Own damage + Third Party</p><br>
+        <p>Premium: ₹6,000 / year</p><br>
+        <h4>Benefits</h4><br>
+        <ul>
+            <li>Accident & theft coverage</li><br>
+            <li>Third-party liability</li><br>
+            <li>Natural disaster protection</li><br>
+        </ul>
+        <button class="apply-btn" onclick="apply('Comprehensive Car Insurance', 6000)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Third Party Car Insurance</h2><br>
+        <p><strong>Coverage:</strong> Third-party damages</p><br>
+        <p>Premium: ₹2,100 / year</p><br>
+        <h4>Benefits</h4><br>
+        <ul>
+            <li>Legally mandatory</li><br>
+            <li>Third-party injury cover</li><br>
+            <li>Property damage cover</li><br>
+        </ul>
+        <button class="apply-btn" onclick="apply('Third Party Car Insurance', 2100)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Standalone Own Damage</h2><br>
+        <p><strong>Coverage:</strong> Vehicle damage only</p><br>
+        <p>Premium: ₹3,500 / year</p><br>
+        <h4>Benefits</h4><br>
+        <ul>
+            <li>Accident damage cover</li><br>
+            <li>Theft protection</li><br>
+            <li>Flexible add-ons</li><br>
+        </ul>
+        <button class="apply-btn" onclick="apply('Standalone Own Damage', 3500)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Two Wheeler Insurance</h2><br>
+        <p><strong>Coverage:</strong> Bike damage + Third Party</p><br>
+        <p>Premium: ₹1,800 / year</p><br>
+        <h4>Benefits</h4><br>
+        <ul>
+            <li>Accident & theft cover</li><br>
+            <li>Third-party liability</li><br>
+            <li>Personal accident cover</li><br>
+        </ul>
+        <button class="apply-btn" onclick="apply('Two Wheeler Insurance', 1800)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Electric Vehicle Insurance</h2><br>
+        <p><strong>Coverage:</strong> EV + Battery protection</p><br>
+        <p>Premium: ₹4,500 / year</p><br>
+        <h4>Benefits</h4><br>
+        <ul>
+            <li>Battery & motor coverage</li><br>
+            <li>Charging equipment cover</li><br>
+            <li>Eco-friendly discounts</li><br>
+        </ul>
+        <button class="apply-btn" onclick="apply('Electric Vehicle Insurance', 4500)">Apply Now</button>
+    </div>
+
+    <div class="box">
+        <h2>Commercial Vehicle Insurance</h2><br>
+        <p><strong>Coverage:</strong> Goods & passenger vehicles</p><br>
+        <p>Premium: ₹8,000 / year</p><br>
+        <h4>Benefits</h4><br>
+        <ul>
+            <li>Heavy vehicle coverage</li><br>
+            <li>Driver accident protection</li><br>
+            <li>Legal liability cover</li><br>
+        </ul>
+        <button class="apply-btn" onclick="apply('Commercial Vehicle Insurance', 8000)">Apply Now</button>
+    </div>
+
+</div>
+
+<div id="custom-alert-overlay" class="alert-overlay" onclick="hideAlert(event)">
+    <div id="custom-alert-box" class="alert-box">
+        <p id="alert-message"></p>
+        <button id="alert-ok-button" onclick="hideAlert()">OK</button>
+    </div>
+</div>
+
+<div id="custom-confirm-overlay" class="confirm-overlay">
+    <div id="custom-confirm-box" class="confirm-box">
+        <p id="confirm-message">Are you sure you want to log out?</p>
+        <button onclick="handleConfirm(true)">Yes</button>
+        <button class="cancel-btn" onclick="handleConfirm(false)">No</button>
+    </div>
+</div>
+
+
+<script>
+    // Custom Alert Functions (Added)
+    function showAlert(message, redirectUrl = null) {
+        document.getElementById('alert-message').innerText = message;
+        document.getElementById('custom-alert-overlay').style.display = 'flex';
+        window._alertRedirect = redirectUrl;
+    }
+
+    function hideAlert(event) {
+        const overlay = document.getElementById('custom-alert-overlay');
+        if (event && event.target === overlay) {
+            overlay.style.display = 'none';
+            return;
+        }
+        overlay.style.display = 'none';
+        if (window._alertRedirect) {
+            window.location.href = window._alertRedirect;
+            window._alertRedirect = null;
+        }
+    }
+    
+    // Custom Confirm Functions (Added)
+    function showConfirm(message, callback) {
+        document.getElementById('confirm-message').innerText = message;
+        document.getElementById('custom-confirm-overlay').style.display = 'flex';
+        window._confirmCallback = callback;
+    }
+
+    function handleConfirm(isConfirmed) {
+        document.getElementById('custom-confirm-overlay').style.display = 'none';
+        if (window._confirmCallback) {
+            window._confirmCallback(isConfirmed);
+            window._confirmCallback = null;
+        }
+    }
+    // END Custom Popup Functions
+
+
+    // Toggle menu
+    function toggleMenu() {
+        const menu = document.getElementById("menu");
+        menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+
+    // Back button
+    function goBack() {
+        if (window.history.length > 1) window.history.back();
+        else window.location.href = "index.html";
+    }
+
+    // UPDATED: Now uses showConfirm and showAlert
+    function logout() {
+        showConfirm("Are you sure you want to log out?", (confirmed) => {
+            if (confirmed) {
+                // In a real app, you would clear local storage here
+                // localStorage.removeItem("isLoggedIn");
+                // localStorage.removeItem("currentUserEmail");
+                showAlert("Logged out successfully!");
+            }
+        });
+    }
+
+    // UPDATED: Now uses showAlert
+    function apply(planName, price) {
+        let dashboard = JSON.parse(localStorage.getItem("dashboardPlans")) || [];
+
+        dashboard.push({
+            name: planName,
+            price: price,
+            status: "Pending Payment"
+        });
+
+        localStorage.setItem("dashboardPlans", JSON.stringify(dashboard));
+
+        // Using custom showAlert instead of alert()
+        showAlert(`✅ "${planName}" added to your Dashboard!`);
+    }
+</script>
+
+</body>
+</html>
